@@ -13,12 +13,8 @@ import CreateTeam from './Pages/User/CreateTeam';
 import Leaderboard from './Pages/User/LeaderBoard';
 
 function App() {
-<<<<<<< HEAD
-  const role = "admin";
-=======
-  const role = "user";
->>>>>>> 1dce653f7c4b6d5d1db18b56c9e84c0580717cc4
 
+  const role = localStorage.getItem('role');
   if (role === "admin") {
     return (
       <BrowserRouter>
