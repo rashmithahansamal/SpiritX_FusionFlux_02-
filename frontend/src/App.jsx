@@ -12,7 +12,7 @@ import PlayerDetails from './Pages/User/PlayerDetails';
 import CreateTeam from './Pages/User/CreateTeam';
 
 function App() {
-  const role = localStorage.getItem("role");
+  const role = "user";
 
   if (role === "admin") {
     return (
