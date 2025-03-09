@@ -55,11 +55,7 @@ const Chatbot = () => {
     <div style={styles.chatbotContainer}>
       {/* Bot Photo and Header */}
       <div style={styles.headerContainer}>
-        <img
-          src="https://via.placeholder.com/100" // Replace with your bot photo URL
-          alt="Bot"
-          style={styles.botPhoto}
-        />
+
         <h1 style={styles.header}>Cricket Assistant</h1>
       </div>
 
