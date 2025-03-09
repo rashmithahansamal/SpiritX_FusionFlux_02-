@@ -68,6 +68,7 @@ const AdminHeader = () => {
             <Button color="inherit" component={Link} to="/PlayerManage ">Players</Button>
             <Button color="inherit" component={Link} to="/tournement">Tournaments</Button>
             <Button color="inherit" component={Link} to="/aboutus">About Us</Button>
+            <Button color="inherit" component={Link} to="/Spiriter">Spiriter</Button>
           </div>
 
           {/* Profile Section */}
