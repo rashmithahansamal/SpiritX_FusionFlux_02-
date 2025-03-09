@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import AdminHome from './Pages/Admin/AdminHome';
 import AdminHeader from './Layout/AdminLayout/AdminLayout';  // Import AdminHeader
 import PlayerManagement from './Pages/Admin/PlayerManage';
-import Login from './Pages/Auth/Login'; 
+import Login from './Pages/Auth/Login';
 import Signup from './Pages/Auth/SignupPage';
 import UserHome from './Pages/User/UserHome';
 import UserHeader from './Layout/UserLayout/UserLayout';  // Import UserHeader
@@ -13,7 +13,11 @@ import CreateTeam from './Pages/User/CreateTeam';
 import Leaderboard from './Pages/User/LeaderBoard';
 
 function App() {
-  const role = localStorage.getItem("role");
+<<<<<<< HEAD
+  const role = "admin";
+=======
+  const role = "user";
+>>>>>>> 1dce653f7c4b6d5d1db18b56c9e84c0580717cc4
 
   if (role === "admin") {
     return (
