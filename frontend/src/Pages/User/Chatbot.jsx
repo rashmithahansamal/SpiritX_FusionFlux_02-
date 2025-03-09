@@ -53,7 +53,7 @@ const Chatbot = () => {
 
   return (
     <div style={styles.chatbotContainer}>
-      {/* Bot Photo and Header */}
+      {/* Header */}
       <div style={styles.headerContainer}>
 
         <h1 style={styles.header}>Cricket Assistant</h1>
@@ -110,12 +110,6 @@ const styles = {
     flexDirection: "column",
     alignItems: "center",
     marginBottom: "20px",
-  },
-  botPhoto: {
-    width: "100px",
-    height: "100px",
-    borderRadius: "50%",
-    marginBottom: "10px",
   },
   header: {
     fontSize: "24px",
