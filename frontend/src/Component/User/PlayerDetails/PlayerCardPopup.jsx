@@ -44,7 +44,6 @@ const PlayerDetailsPopup = ({ open, handleClose, player }) => {
   if (isNaN(bowlingStrikeRate) || bowlingStrikeRate === Infinity) bowlingStrikeRate = 0;
   if (isNaN(economyRate) || economyRate === Infinity) economyRate = 0;
 
-  const playerPoints = (battingStrikeRate / 5 + battingAverage * 0.8) + (bowlingStrikeRate / 500 + 140 / (economyRate || 1));
 
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth sx={{ backdropFilter: 'blur(5px)' }}>
@@ -57,8 +56,6 @@ const PlayerDetailsPopup = ({ open, handleClose, player }) => {
               <Typography variant="body1">{player.Name}</Typography>
             </Grid>
             <Grid item xs={6}>
-              <Typography variant="h6" sx={{ fontWeight: 'bold', marginBottom: '5px', fontSize: '1.1rem' }}>Player Points</Typography>
-              <Typography variant="body1" sx={{ fontWeight: 'bold', marginBottom: '5px', color: 'gold', fontSize: '1.3rem' }}>{playerPoints.toFixed(2)}</Typography>
             </Grid>
             
             {/* Group Details */}
