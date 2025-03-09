@@ -1,12 +1,3 @@
-from fastapi import FastAPI, HTTPException, Depends
-from pydantic import BaseModel
-from fastapi.middleware.cors import CORSMiddleware
-import csv
-import os
-import mysql.connector
-import uvicorn
-from hashlib import sha256
-
 import asyncio
 import pandas as pd
 from langchain_google_genai import ChatGoogleGenerativeAI
@@ -20,120 +11,6 @@ from datetime import datetime
 from langchain_core.tools import StructuredTool
 from pydantic import BaseModel
 
-# from chatbot.chatbot import get_chatbot_response  # Use hashing for password security
-
-# FastAPI app instance
-app = FastAPI()
-
-# Add CORS middleware
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-# Database connection
-def get_db_connection():
-    return mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="Chathumal@12",
-        database="Project1"
-    )
-
-# CSV File Path
-CSV_FILE = "./sample_data.csv"
-
-def read_csv():
-    players = []
-    if os.path.exists(CSV_FILE):
-        with open(CSV_FILE, mode="r", newline="", encoding="utf-8") as file:
-            reader = csv.DictReader(file)
-            for row in reader:
-                row = {key.replace(" ", "_"): value for key, value in row.items()}
-                players.append(row)
-    return players
-
-def write_csv(players):
-    with open(CSV_FILE, mode="w", newline="", encoding="utf-8") as file:
-
-        fieldnames = ["Name", "University", "Category", "Total_Runs", "Balls_Faced", "Innings_Played", "Wickets", "Overs_Bowled", "Runs_Conceded"]
-        writer = csv.DictWriter(file, fieldnames=fieldnames)
-        writer.writeheader()
-
-
-        for player in players:
-            player = {key.replace(" ", "_"): value for key, value in player.items()}  # Replace spaces with underscores
-            writer.writerow(player)
-
-# Player model
-class Player(BaseModel):
-    Name: str
-    University: str
-    Category: str
-    Total_Runs: int
-    Balls_Faced: int
-    Innings_Played: int
-    Wickets: int
-    Overs_Bowled: float
-    Runs_Conceded: int
-
-@app.get("/players")
-def get_players():
-    return read_csv()
-
-@app.post("/players")
-def add_player(player: Player):
-    players = read_csv()
-    players.append(player.dict())
-    write_csv(players)
-    return {"message": "Player added successfully"}
-
-@app.put("/players/{name}")
-def update_player(name: str, updated_player: Player):
-    players = read_csv()
-    for player in players:
-        if player["Name"] == name:
-            player.update(updated_player.dict())
-            write_csv(players)
-            return {"message": "Player updated successfully"}
-    raise HTTPException(status_code=404, detail="Player not found")
-
-@app.delete("/players/{name}")
-def delete_player(name: str):
-    players = read_csv()
-    filtered_players = [p for p in players if p["Name"] != name]
-    
-    if len(filtered_players) == len(players):  # No player was deleted
-        raise HTTPException(status_code=404, detail="Player not found")
-    
-   
-    write_csv(filtered_players)
-    
-    return {"message": "Player deleted successfully"}
-
-
-# Chatbot Request Model
-class ChatbotRequest(BaseModel):
-    user_id: int
-    query: str
-
-# Chatbot Response Model
-class ChatbotResponse(BaseModel):
-    response: str
-
-# Chatbot Endpoint
-@app.post("/chatbot", response_model=ChatbotResponse)
-async def chatbot_interaction(request: ChatbotRequest):
-    try:
-        response = await get_chatbot_response(request.user_id, request.query)
-        print(response)
-        return {"response": response}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-    
 
 llm = ChatGoogleGenerativeAI(
     model="gemini-1.5-flash",
@@ -162,20 +39,19 @@ class Get_player_details(BaseModel):
 # df = pd.read_csv(os.path.join(os.path.dirname(__file__), '..', 'sample_data.csv'))
 # print(df.head())
 
-# file_path = "/Users/rashmithahansamal/Documents/ChatBot/sample_data.csv" 
-df = pd.read_csv(CSV_FILE)
-print(df.head())
+file_path = "/Users/rashmithahansamal/Documents/ChatBot/sample_data.csv" 
+df = pd.read_csv(file_path)
 
 # Function to calculate player points
 def calculate_player_points(row):
     # Batting Strike Rate
-    batting_strike_rate = (row['Total_Runs'] / row['Balls_Faced']) * 100 if row['Balls_Faced'] > 0 else 0
+    batting_strike_rate = (row['Total Runs'] / row['Balls Faced']) * 100 if row['Balls Faced'] > 0 else 0
     # Batting Average
-    batting_average = row['Total_Runs'] / row['Innings_Played'] if row['Innings_Played'] > 0 else 0
+    batting_average = row['Total Runs'] / row['Innings Played'] if row['Innings Played'] > 0 else 0
     # Bowling Strike Rate
-    bowling_strike_rate = (row['Overs_Bowled']*6) / row['Wickets'] if row['Wickets'] > 0 else 0
+    bowling_strike_rate = (row['Overs Bowled']*6) / row['Wickets'] if row['Wickets'] > 0 else 0
     # Economy Rate
-    economy_rate = (row['Runs_Conceded'] / (row['Overs_Bowled'])*6) * 6 if (row['Overs_Bowled'])*6 > 0 else 0
+    economy_rate = (row['Runs Conceded'] / (row['Overs Bowled'])*6) * 6 if (row['Overs Bowled'])*6 > 0 else 0
 
     # Handle division by zero
     bowling_contribution = (500 / bowling_strike_rate) if bowling_strike_rate > 0 else 0
@@ -216,7 +92,7 @@ async def get_best_11_players(user_id:int,batsman_count:int,bowler_count:int,all
      # Extract player names and join them into a comma-separated string
     player_names = selected_players['Name'].tolist()
     player_names_str = ', '.join(player_names)
-    print(player_names_str)
+
     return f"Best 11 players are: {player_names_str}"
 
 
@@ -287,7 +163,7 @@ tools = [
         **Parameters:**
         - `user_id` (int): Unique identifier of the user.
         - `player_name` (str): name of the player
-        - `attribute` (str): what attribute of the player to retrieve (eg. University,Category,Total_Runs,Balls_Faced,Innings_Played,Wickets,Overs_Bowled,Runs_Conceded, etc.)
+        - `attribute` (str): what attribute of the player to retrieve (eg. University,Category,Total Runs,Balls Faced,Innings Played,Wickets,Overs Bowled,Runs Conceded, etc.)
        
         **Usage Example:**
         If a user asks: *"what uiniversity chamika chandimal is in?"*
@@ -332,7 +208,7 @@ tools = [
     
 ]
 
-SYSTEM_PROMPT = """You are a cricket assistant. Use available tools in sequence when needed. when user asks unrelated questions ignore answering. try to be limited to the capabilities of the given tools. but do greetings and be nice to the user. if user asks information about a player that cannot be answered by given tool say "I don’t have enough knowledge to answer that question.".Ensure the chatbot does not reveal player’s points under any circumstances.
+SYSTEM_PROMPT = """You are a cricket assistant. Use available tools in sequence when needed. when user asks unrelated questions ignore answering. try to be limited to the capabilities of the given tools. but do greetings and be nice to the user. if user asks information about a player that cannot be answered by given tool say "I don’t have enough knowledge to answer that question."
 You can use multiple tools for complex requests. Follow this pattern:
 1. Understand the query
 2. Identify required tools
@@ -373,72 +249,3 @@ async def get_chatbot_response(user_id: int, query: str) -> str:
     
     
     return response["output"]
-
-
-
-class LoginRequest(BaseModel):
-    username: str
-    password: str
-
-# Request model for registration
-class SignupRequest(BaseModel):
-    username: str
-    email: str
-    password: str
-    confirm_password: str
-
-# Endpoint for login
-@app.post("/login")
-async def login(request: LoginRequest):
-    conn = get_db_connection()
-    cursor = conn.cursor(dictionary=True)
-
-    # Fetch user from DB
-    cursor.execute("SELECT username, password,role FROM users WHERE username = %s", (request.username,))
-    user = cursor.fetchone()
-
-    cursor.close()
-    conn.close()
-
-    # Hash the entered password and compare it with the stored hash
-    hashed_input_password = sha256(request.password.encode()).hexdigest()
-
-    if not user :
-        raise HTTPException(status_code=401, detail="Invalid username user not found")
-    elif  user["password"] != hashed_input_password:
-        raise HTTPException(status_code=401, detail="Invalid Password")
-    return {"message": "Login successful","role":user["role"]}
-
-# Endpoint for signup
-@app.post("/signup")
-async def signup(request: SignupRequest):
-    # Check if passwords match
-    if request.password != request.confirm_password:
-        raise HTTPException(status_code=400, detail="Passwords do not match")
-
-    # Hash password before saving
-    hashed_password = sha256(request.password.encode()).hexdigest()
-
-    conn = get_db_connection()
-    cursor = conn.cursor(dictionary=True)
-
-    # Check if username already exists
-    cursor.execute("SELECT username FROM users WHERE username = %s", (request.username,))
-    existing_user = cursor.fetchone()
-    if existing_user:
-        raise HTTPException(status_code=400, detail="Username already exists")
-
-    # Insert new user into database
-    cursor.execute(
-        "INSERT INTO users (username, password) VALUES (%s, %s)",
-        (request.username, hashed_password)
-    )
-    conn.commit()
-
-    cursor.close()
-    conn.close()
-
-    return {"message": "User registered successfully"}
-    
-if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
