@@ -34,22 +34,15 @@ const PlayerDetailsPopup = ({ open, handleClose, player }) => {
     );
   }
 
-  let battingStrikeRate = player.Balls_Faced > 0 ? (player.Total_Runs / player.Balls_Faced) * 100 : 0;
-  // Batting Average
-  let battingAverage = player.Innings_Played > 0 ? player.Total_Runs / player.Innings_Played : 0;
-  // Bowling Strike Rate
-  let bowlingStrikeRate = player.Wickets > 0 ? (player.Overs_Bowled * 6) / player.Wickets : 0;
-  // Economy Rate
-  let economyRate = (player.Overs_Bowled * 6) > 0 ? (player.Runs_Conceded / player.Overs_Bowled) * 6 : 0;
+  let battingStrikeRate = (player.Total_Runs / player.Balls_Faced) * 100;
+  let battingAverage = player.Total_Runs / player.Innings_Played;
+  let bowlingStrikeRate = player.Wickets ? player.Overs_Bowled / player.Wickets : 0;
+  let economyRate = player.Overs_Bowled ? (player.Runs_Conceded / player.Overs_Bowled) / 6 : 0;
 
-  // Handle division by zero and invalid numbers
   if (isNaN(battingStrikeRate) || battingStrikeRate === Infinity) battingStrikeRate = 0;
   if (isNaN(battingAverage) || battingAverage === Infinity) battingAverage = 0;
   if (isNaN(bowlingStrikeRate) || bowlingStrikeRate === Infinity) bowlingStrikeRate = 0;
   if (isNaN(economyRate) || economyRate === Infinity) economyRate = 0;
-
-  // Player Points Calculation
-  const playerPoints = (battingStrikeRate / 5 + battingAverage * 0.8) + (bowlingStrikeRate / 500 + 140 / (economyRate || 1));
 
 
   return (
@@ -63,8 +56,6 @@ const PlayerDetailsPopup = ({ open, handleClose, player }) => {
               <Typography variant="body1">{player.Name}</Typography>
             </Grid>
             <Grid item xs={6}>
-              <Typography variant="h6" sx={{ fontWeight: 'bold', marginBottom: '5px', fontSize: '1.1rem' }}>Player Points</Typography>
-              <Typography variant="body1" sx={{ fontWeight: 'bold', marginBottom: '5px', color: 'gold', fontSize: '1.3rem' }}>{playerPoints.toFixed(2)}</Typography>
             </Grid>
             
             {/* Group Details */}

@@ -1,38 +1,10 @@
 import React, { useState } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableSortLabel, TablePagination, MenuItem, Select, InputLabel, FormControl, IconButton, Box, Button } from '@mui/material';
-import Paper from '@mui/material/Paper';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import AddIcon from '@mui/icons-material/Add';
-import AddPlayerPopup from './AddPlayerPopup';
-import EditPlayerPopup from './EditPlayerPopup';
-import DeletePlayerPopup from './DeletePlayerPopup';
-import PlayerDetailsPopup from './PlayerCardPopup';  // Import PlayerDetailsPopup
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableSortLabel, TablePagination, MenuItem, Select, InputLabel, FormControl, IconButton, Box, Paper } from '@mui/material';
+import PlayerDetailsPopup from './PlayerCardPopup';
 
-const PlayerTable = ({ players, filteredPlayers, handleChangePage, handleFilterChange, page, rowsPerPage, handleAddPlayer, handleEditPlayer, handleDeletePlayer }) => {
-    const [openAddPopup, setOpenAddPopup] = useState(false);
-    const [openEditPopup, setOpenEditPopup] = useState(false);
-    const [openDeletePopup, setOpenDeletePopup] = useState(false);
-    const [openDetailsPopup, setOpenDetailsPopup] = useState(false); // State for details popup
-    const [playerToEdit, setPlayerToEdit] = useState(null);
-    const [playerToDelete, setPlayerToDelete] = useState(null);
-    const [playerToView, setPlayerToView] = useState(null);  // State for selected player
-
-    // Handle Open/Close of each popup
-    const handleAddPopupOpen = () => setOpenAddPopup(true);
-    const handleAddPopupClose = () => setOpenAddPopup(false);
-
-    const handleEditPopupOpen = (player) => {
-        setPlayerToEdit(player);
-        setOpenEditPopup(true);
-    };
-    const handleEditPopupClose = () => setOpenEditPopup(false);
-
-    const handleDeletePopupOpen = (player) => {
-        setPlayerToDelete(player);
-        setOpenDeletePopup(true);
-    };
-    const handleDeletePopupClose = () => setOpenDeletePopup(false);
+const PlayerTable = ({ players, filteredPlayers, handleChangePage, handleFilterChange, page, rowsPerPage }) => {
+    const [openDetailsPopup, setOpenDetailsPopup] = useState(false);
+    const [playerToView, setPlayerToView] = useState(null);
 
     const handleDetailsPopupOpen = (player) => {
         setPlayerToView(player);
@@ -73,16 +45,6 @@ const PlayerTable = ({ players, filteredPlayers, handleChangePage, handleFilterC
                         </Select>
                     </FormControl>
                 </div>
-
-                {/* Add New Player Button */}
-                <Button
-                    variant="contained"
-                    color="primary"
-                    startIcon={<AddIcon />}
-                    onClick={handleAddPopupOpen}
-                >
-                    Add New Player
-                </Button>
             </Box>
 
             {/* Table Section */}
@@ -112,26 +74,11 @@ const PlayerTable = ({ players, filteredPlayers, handleChangePage, handleFilterC
                                 <TableCell>{player.Wickets}</TableCell>
                                 <TableCell>
                                     <IconButton
-                                        color="primary"
-                                        onClick={() => handleEditPopupOpen(player)}
-                                        size="small"
-                                        sx={{ marginRight: '8px' }}
-                                    >
-                                        <EditIcon />
-                                    </IconButton>
-                                    <IconButton
-                                        color="error"
-                                        onClick={() => handleDeletePopupOpen(player)}
-                                        size="small"
-                                    >
-                                        <DeleteIcon />
-                                    </IconButton>
-                                    <IconButton
                                         color="info"
-                                        onClick={() => handleDetailsPopupOpen(player)} // Open details popup
+                                        onClick={() => handleDetailsPopupOpen(player)}
                                         size="small"
                                     >
-                                        <span>👁️</span> {/* Eye icon or any symbol you prefer */}
+                                        <span>👁️</span>
                                     </IconButton>
                                 </TableCell>
                             </TableRow>
@@ -151,10 +98,7 @@ const PlayerTable = ({ players, filteredPlayers, handleChangePage, handleFilterC
                 onRowsPerPageChange={(e) => handleFilterChange({ rowsPerPage: e.target.value })}
             />
 
-            {/* Popups */}
-            <AddPlayerPopup open={openAddPopup} handleClose={handleAddPopupClose} handleAddPlayer={handleAddPlayer} />
-            <EditPlayerPopup open={openEditPopup} handleClose={handleEditPopupClose} player={playerToEdit} handleEditPlayer={handleEditPlayer} />
-            <DeletePlayerPopup open={openDeletePopup} handleClose={handleDeletePopupClose} player={playerToDelete} handleDeletePlayer={handleDeletePlayer} />
+            {/* Player Details Popup */}
             <PlayerDetailsPopup open={openDetailsPopup} handleClose={handleDetailsPopupClose} player={playerToView} />
         </div>
     );

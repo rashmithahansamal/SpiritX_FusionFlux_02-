@@ -2,12 +2,13 @@ import React from 'react';
 import { AppBar, Toolbar, Button, Menu, MenuItem, IconButton, TextField, InputAdornment, Typography } from '@mui/material';
 import { AccountCircle } from '@mui/icons-material';
 import SearchIcon from '@mui/icons-material/Search';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'; // Added useNavigate import
 
 const AdminHeader = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [searchText, setSearchText] = React.useState('');
   const userName = "John Doe"; // Example username, replace with actual user name dynamically
+  const navigate = useNavigate(); // Initialize the navigate function
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -22,8 +23,8 @@ const AdminHeader = () => {
     localStorage.removeItem('user');
     localStorage.removeItem('username');
     localStorage.removeItem('role');
-    navigate('/login');
-    window.location.reload();
+    navigate('/login'); // Navigate to login page
+    window.location.reload(); // Refresh the page after logout
   };
 
   return (
@@ -31,13 +32,15 @@ const AdminHeader = () => {
       <div style={{ display: 'block', margin: 'auto', width: '60%', height: '80px' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-evenly', flex: 1, paddingTop: '15px' }}>
           {/* Logo */}
-          <img
-            src="https://cdn.pixabay.com/photo/2020/05/17/05/11/sports-5180019_960_720.png"
-            alt="Logo"
-            width="40"
-            height="40"
-            style={{ marginRight: '40px' }} // Increased margin for more space
-          />
+          <Link to={"/"}> 
+            <img
+              src="https://cdn.pixabay.com/photo/2020/05/17/05/11/sports-5180019_960_720.png"
+              alt="Logo"
+              width="40"
+              height="40"
+              style={{ marginRight: '40px' }} // Increased margin for more space
+            />
+          </Link>
           
           {/* Search Bar */}
           <TextField
@@ -62,20 +65,20 @@ const AdminHeader = () => {
 
           {/* Navigation Links */}
           <div style={{ display: 'flex', gap: '30px' }}> {/* Increased gap between links */}
-            <Button color="inherit" component={Link} to="/PlayerManage ">Players</Button>
-            <Button color="inherit" component={Link} to="/tournaments">Tournaments</Button>
+            <Button color="inherit" component={Link} to="/PlayerDetails">Players</Button>
+            <Button color="inherit" component={Link} to="/createteam">Create Team</Button>
+            <Button color="inherit" component={Link} to="/leaderboard">LeaderBoard</Button>
             <Button color="inherit" component={Link} to="/aboutus">About Us</Button>
           </div>
 
           {/* Profile Section */}
-          <div style={{ display: 'flex', alignItems: 'center',cursor:'pointer' }} onClick={handleProfileMenuOpen}>
+          <div style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }} onClick={handleProfileMenuOpen}>
             <Typography variant="body1" color="white" sx={{ marginRight: '10px' }}>
               {localStorage.getItem('username') || userName}
             </Typography>
             <IconButton
               edge="end"
               color="inherit"
-              
               aria-label="account of current user"
               aria-controls="menu-appbar"
               aria-haspopup="true"
