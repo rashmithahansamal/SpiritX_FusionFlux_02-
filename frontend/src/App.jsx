@@ -3,13 +3,13 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import AdminHome from './Pages/Admin/AdminHome';
 import AdminHeader from './Layout/AdminLayout/AdminLayout';  // Import AdminHeader
 import PlayerManagement from './Pages/Admin/PlayerManage';
-import Login from './Pages/Auth/Login'; 
+import Login from './Pages/Auth/Login';
 import Signup from './Pages/Auth/SignupPage';
 import UserHome from './Pages/User/UserHome';
 import UserHeader from './Layout/UserLayout/UserLayout';  // Import UserHeader
 
 function App() {
-  const role = localStorage.getItem("role");
+  const role = "admin";
 
   if (role === "admin") {
     return (
