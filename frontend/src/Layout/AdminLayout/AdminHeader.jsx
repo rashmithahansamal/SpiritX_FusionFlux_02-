@@ -66,7 +66,7 @@ const AdminHeader = () => {
           {/* Navigation Links */}
           <div style={{ display: 'flex', gap: '30px' }}>
             <Button color="inherit" component={Link} to="/PlayerManage ">Players</Button>
-            <Button color="inherit" component={Link} to="/tournaments">Tournaments</Button>
+            <Button color="inherit" component={Link} to="/tournement">Tournaments</Button>
             <Button color="inherit" component={Link} to="/aboutus">About Us</Button>
           </div>
 
