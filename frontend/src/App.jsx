@@ -7,9 +7,10 @@ import Login from './Pages/Auth/Login';
 import Signup from './Pages/Auth/SignupPage';
 import UserHome from './Pages/User/UserHome';
 import UserHeader from './Layout/UserLayout/UserLayout';  // Import UserHeader
+import Chatbot from './Pages/User/Chatbot';
 
 function App() {
-  const role = localStorage.getItem("role");
+  const role = "admin"
 
   if (role === "admin") {
     return (
@@ -19,6 +20,7 @@ function App() {
             <Route path="/adminhome" element={<AdminHome />} />
             <Route path="/playermanage" element={<PlayerManagement />} />
             <Route path="*" element={<Navigate to="/adminhome" />} /> {/* Handle unauthorized route */}
+            <Route path="/chatbot" element={<Chatbot />} />
           </Route>
         </Routes>
       </BrowserRouter>
