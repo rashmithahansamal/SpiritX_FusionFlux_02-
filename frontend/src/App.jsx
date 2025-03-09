@@ -27,7 +27,7 @@ function App() {
             <Route path="/playermanage" element={<PlayerManagement />} />
             <Route path="/tournement" element={<Tournement />} />
             <Route path="*" element={<Navigate to="/adminhome" />} /> {/* Handle unauthorized route */}
-            <Route path="/chatbot" element={<Chatbot />} />
+            
           </Route>
         </Routes>
       </BrowserRouter>
@@ -44,6 +44,7 @@ function App() {
             <Route path="/createteam" element={<CreateTeam />} />
             <Route path="/leaderboard" element={<Leaderboard />} />
             <Route path="*" element={<Navigate to="/userhome" />} /> {/* Handle unauthorized route */}
+            <Route path="/chatbot" element={<Chatbot />} />
           </Route>
         </Routes>
       </BrowserRouter>
