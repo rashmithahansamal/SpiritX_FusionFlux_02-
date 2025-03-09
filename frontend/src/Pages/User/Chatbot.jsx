@@ -53,14 +53,9 @@ const Chatbot = () => {
 
   return (
     <div style={styles.chatbotContainer}>
-      {/* Bot Photo and Header */}
+      {/* Header */}
       <div style={styles.headerContainer}>
-        <img
-          src="https://via.placeholder.com/100" // Replace with your bot photo URL
-          alt="Bot"
-          style={styles.botPhoto}
-        />
-        <h1 style={styles.header}>Cricket Assistant</h1>
+        <h1 style={styles.header}>Spiriter</h1>
       </div>
 
       {/* Chat Window */}
@@ -114,12 +109,6 @@ const styles = {
     flexDirection: "column",
     alignItems: "center",
     marginBottom: "20px",
-  },
-  botPhoto: {
-    width: "100px",
-    height: "100px",
-    borderRadius: "50%",
-    marginBottom: "10px",
   },
   header: {
     fontSize: "24px",
