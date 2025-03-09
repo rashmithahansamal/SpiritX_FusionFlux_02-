@@ -37,15 +37,21 @@ def read_csv():
         with open(CSV_FILE, mode="r", newline="", encoding="utf-8") as file:
             reader = csv.DictReader(file)
             for row in reader:
+                row = {key.replace(" ", "_"): value for key, value in row.items()}
                 players.append(row)
     return players
 
 def write_csv(players):
     with open(CSV_FILE, mode="w", newline="", encoding="utf-8") as file:
-        fieldnames = ["Name", "University", "Category", "Total Runs", "Balls Faced", "Innings Played", "Wickets", "Overs Bowled", "Runs Conceded"]
+
+        fieldnames = ["Name", "University", "Category", "Total_Runs", "Balls_Faced", "Innings_Played", "Wickets", "Overs_Bowled", "Runs_Conceded"]
         writer = csv.DictWriter(file, fieldnames=fieldnames)
         writer.writeheader()
-        writer.writerows(players)
+
+
+        for player in players:
+            player = {key.replace(" ", "_"): value for key, value in player.items()}  # Replace spaces with underscores
+            writer.writerow(player)
 
 # Player model
 class Player(BaseModel):
@@ -84,12 +90,16 @@ def update_player(name: str, updated_player: Player):
 def delete_player(name: str):
     players = read_csv()
     filtered_players = [p for p in players if p["Name"] != name]
-    if len(filtered_players) == len(players):
+    
+    if len(filtered_players) == len(players):  # No player was deleted
         raise HTTPException(status_code=404, detail="Player not found")
+    
+   
     write_csv(filtered_players)
+    
     return {"message": "Player deleted successfully"}
 
-# Request model for login
+
 class LoginRequest(BaseModel):
     username: str
     password: str
@@ -108,7 +118,7 @@ async def login(request: LoginRequest):
     cursor = conn.cursor(dictionary=True)
 
     # Fetch user from DB
-    cursor.execute("SELECT username, password FROM users WHERE username = %s", (request.username,))
+    cursor.execute("SELECT username, password,role FROM users WHERE username = %s", (request.username,))
     user = cursor.fetchone()
 
     cursor.close()
@@ -121,7 +131,7 @@ async def login(request: LoginRequest):
         raise HTTPException(status_code=401, detail="Invalid username user not found")
     elif  user["password"] != hashed_input_password:
         raise HTTPException(status_code=401, detail="Invalid Password")
-    return {"message": "Login successful", "redirect_url": "/dashboard"}
+    return {"message": "Login successful","role":user["role"]}
 
 # Endpoint for signup
 @app.post("/signup")
