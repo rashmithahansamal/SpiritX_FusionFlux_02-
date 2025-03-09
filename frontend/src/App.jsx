@@ -7,6 +7,7 @@ import Login from './Pages/Auth/Login';
 import Signup from './Pages/Auth/SignupPage';
 import UserHome from './Pages/User/UserHome';
 import UserHeader from './Layout/UserLayout/UserLayout';  // Import UserHeader
+import Tournement from './Pages/Admin/Tournement';
 
 function App() {
   const role = localStorage.getItem("role");
@@ -18,6 +19,7 @@ function App() {
           <Route element={<AdminHeader />}>
             <Route path="/adminhome" element={<AdminHome />} />
             <Route path="/playermanage" element={<PlayerManagement />} />
+            <Route path="/tournement" element={<Tournement />} />
             <Route path="*" element={<Navigate to="/adminhome" />} /> {/* Handle unauthorized route */}
           </Route>
         </Routes>

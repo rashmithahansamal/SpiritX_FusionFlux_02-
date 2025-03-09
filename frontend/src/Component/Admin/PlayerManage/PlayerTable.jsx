@@ -7,13 +7,16 @@ import AddIcon from '@mui/icons-material/Add';
 import AddPlayerPopup from './AddPlayerPopup';
 import EditPlayerPopup from './EditPlayerPopup';
 import DeletePlayerPopup from './DeletePlayerPopup';
+import PlayerDetailsPopup from './PlayerCardPopup';  // Import PlayerDetailsPopup
 
 const PlayerTable = ({ players, filteredPlayers, handleChangePage, handleFilterChange, page, rowsPerPage, handleAddPlayer, handleEditPlayer, handleDeletePlayer }) => {
     const [openAddPopup, setOpenAddPopup] = useState(false);
     const [openEditPopup, setOpenEditPopup] = useState(false);
     const [openDeletePopup, setOpenDeletePopup] = useState(false);
+    const [openDetailsPopup, setOpenDetailsPopup] = useState(false); // State for details popup
     const [playerToEdit, setPlayerToEdit] = useState(null);
     const [playerToDelete, setPlayerToDelete] = useState(null);
+    const [playerToView, setPlayerToView] = useState(null);  // State for selected player
 
     // Handle Open/Close of each popup
     const handleAddPopupOpen = () => setOpenAddPopup(true);
@@ -30,6 +33,12 @@ const PlayerTable = ({ players, filteredPlayers, handleChangePage, handleFilterC
         setOpenDeletePopup(true);
     };
     const handleDeletePopupClose = () => setOpenDeletePopup(false);
+
+    const handleDetailsPopupOpen = (player) => {
+        setPlayerToView(player);
+        setOpenDetailsPopup(true);
+    };
+    const handleDetailsPopupClose = () => setOpenDetailsPopup(false);
 
     return (
         <div>
@@ -117,6 +126,13 @@ const PlayerTable = ({ players, filteredPlayers, handleChangePage, handleFilterC
                                     >
                                         <DeleteIcon />
                                     </IconButton>
+                                    <IconButton
+                                        color="info"
+                                        onClick={() => handleDetailsPopupOpen(player)} // Open details popup
+                                        size="small"
+                                    >
+                                        <span>👁️</span> {/* Eye icon or any symbol you prefer */}
+                                    </IconButton>
                                 </TableCell>
                             </TableRow>
                         ))}
@@ -139,6 +155,7 @@ const PlayerTable = ({ players, filteredPlayers, handleChangePage, handleFilterC
             <AddPlayerPopup open={openAddPopup} handleClose={handleAddPopupClose} handleAddPlayer={handleAddPlayer} />
             <EditPlayerPopup open={openEditPopup} handleClose={handleEditPopupClose} player={playerToEdit} handleEditPlayer={handleEditPlayer} />
             <DeletePlayerPopup open={openDeletePopup} handleClose={handleDeletePopupClose} player={playerToDelete} handleDeletePlayer={handleDeletePlayer} />
+            <PlayerDetailsPopup open={openDetailsPopup} handleClose={handleDetailsPopupClose} player={playerToView} />
         </div>
     );
 };
