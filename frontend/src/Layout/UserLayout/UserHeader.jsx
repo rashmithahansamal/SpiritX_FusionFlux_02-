@@ -64,6 +64,7 @@ const AdminHeader = () => {
           <div style={{ display: 'flex', gap: '30px' }}> {/* Increased gap between links */}
             <Button color="inherit" component={Link} to="/PlayerDetails">Players</Button>
             <Button color="inherit" component={Link} to="/createteam">Create Team</Button>
+            <Button color="inherit" component={Link} to="/leaderboard">LeaderBoard</Button>
             <Button color="inherit" component={Link} to="/aboutus">About Us</Button>
           </div>
 

@@ -188,5 +188,47 @@ async def signup(request: SignupRequest):
 
     return {"message": "User registered successfully"}
 
+class Team(BaseModel):
+    username: str
+    team: list[str]
+    totalPoints: float
+    teamName: str  # Added team name field
+
+@app.post("/team")
+async def submit_team(team_data: Team):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    # Insert team data into the 'teams' table including the team name
+    try:
+        cursor.execute("""
+            INSERT INTO teams (username, team, totalPoints, teamName)
+            VALUES (%s, %s, %s, %s)
+        """, (team_data.username, ",".join(team_data.team), team_data.totalPoints, team_data.teamName))
+        conn.commit()
+        return {"message": "Team submitted successfully!"}
+    except Exception as e:
+        conn.rollback()
+        raise HTTPException(status_code=500, detail=f"Error inserting team into database: {str(e)}")
+    finally:
+        cursor.close()
+        conn.close()
+
+# Example of getting teams (optional)
+@app.get("/leaderboard")
+async def get_teams():
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    # Fetch all teams from the 'teams' table
+    cursor.execute("SELECT * FROM teams")
+    teams = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    return teams
+
+
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)

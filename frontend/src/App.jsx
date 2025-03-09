@@ -10,6 +10,7 @@ import UserHeader from './Layout/UserLayout/UserLayout';  // Import UserHeader
 import Tournement from './Pages/Admin/Tournement';
 import PlayerDetails from './Pages/User/PlayerDetails';
 import CreateTeam from './Pages/User/CreateTeam';
+import Leaderboard from './Pages/User/LeaderBoard';
 
 function App() {
   const role = localStorage.getItem("role");
@@ -37,6 +38,7 @@ function App() {
             <Route path="/userhome" element={<UserHome />} />
             <Route path="playerdetails" element={<PlayerDetails />} />
             <Route path="/createteam" element={<CreateTeam />} />
+            <Route path="/leaderboard" element={<Leaderboard />} />
             <Route path="*" element={<Navigate to="/userhome" />} /> {/* Handle unauthorized route */}
           </Route>
         </Routes>
